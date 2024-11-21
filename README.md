@@ -2,6 +2,8 @@
 
 This repository contains a collection of Nix flakes for different development environments.
 
+> **Note:** While Nix offers powerful features for reproducible development environments, it may not be the most stable package management solution. The learning curve can be steep, and you might encounter occasional quirks. However, it provides a good starting point for managing development environments and dependencies in a declarative way.
+
 ## What is Nix?
 
 Nix is a powerful package manager and build system that enables reproducible, declarative, and reliable software development environments. Unlike traditional package managers, Nix:
