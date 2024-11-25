@@ -14,13 +14,16 @@
             allowUnfree = true;
           };
         };
+        androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
       in
       {
         devShell =
-          with pkgs; mkShell
+          with pkgs; mkShell rec
             {
+              ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
               buildInputs = [
                 flutter
+                androidSdk
                 jdk
               ] ++ (if stdenv.isDarwin then [
                 cocoapods
