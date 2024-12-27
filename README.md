@@ -80,10 +80,10 @@ The repository contains two main flakes:
 
    ```bash
    # For CMS development environment
-   use flake "github:Prn-Ice/nix_flakes?dir=cms_flake"
+   use flake "github:Prn-Ice/nix_flakes?dir=cms_flake" --refresh
 
    # Or for Flutter development environment
-   use flake "github:Prn-Ice/nix_flakes?dir=flutter_flake"
+   use flake "github:Prn-Ice/nix_flakes?dir=flutter_flake" --refresh
    ```
 
 3. Allow direnv to load the configuration:
