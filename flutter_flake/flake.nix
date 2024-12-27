@@ -10,8 +10,8 @@
         pkgs = import nixpkgs {
           inherit system;
           config = {
-            android_sdk.accept_license = true;
-            allowUnfree = true;
+            # android_sdk.accept_license = true;
+            # allowUnfree = true;
           };
         };
         androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
@@ -22,8 +22,7 @@
             {
               ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
               buildInputs = [
-                flutter
-                androidSdk
+                # flutter
                 jdk
               ] ++ (if stdenv.isDarwin then [
                 cocoapods
