@@ -14,7 +14,7 @@
             # allowUnfree = true;
           };
         };
-        androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
+        # androidSdk = pkgs.androidenv.androidPkgs_9_0.androidsdk;
       in
       {
         devShell =
