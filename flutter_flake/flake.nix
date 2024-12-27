@@ -20,7 +20,7 @@
         devShell =
           with pkgs; mkShell rec
             {
-              ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+              # ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
               buildInputs = [
                 # flutter
                 jdk
