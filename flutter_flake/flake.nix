@@ -48,8 +48,11 @@
             if !stdenv.isDarwin
             then ''
               export CHROME_EXECUTABLE="google-chrome-stable"
+              export PATH="$PATH:$HOME/.pub-cache/bin"
             ''
-            else "";
+            else ''
+              export PATH="$PATH:$HOME/.pub-cache/bin"
+            '';
         };
     });
 }
