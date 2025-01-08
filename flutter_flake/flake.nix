@@ -31,7 +31,7 @@
           buildInputs =
             [
               flutter
-              jdk
+              zulu17
               lcov
             ]
             ++ (
