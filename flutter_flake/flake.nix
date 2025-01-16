@@ -30,7 +30,6 @@
           ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
           buildInputs =
             [
-              flutter
               zulu17
               lcov
             ]
@@ -40,6 +39,7 @@
                 cocoapods
               ]
               else [
+                flutter
                 androidSdk
               ]
             );
