@@ -5,18 +5,24 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, systems }: let
-    forEachSystem = f: nixpkgs.lib.genAttrs (import systems) (system: f { 
-      pkgs = import nixpkgs { 
-        inherit system; 
-        config = {
-          android_sdk.accept_license = true;
-          allowUnfree = true;
-        };
-      }; 
-    });
+  outputs = {
+    self,
+    nixpkgs,
+    systems,
+  }: let
+    forEachSystem = f:
+      nixpkgs.lib.genAttrs (import systems) (system:
+        f {
+          pkgs = import nixpkgs {
+            inherit system;
+            config = {
+              android_sdk.accept_license = true;
+              allowUnfree = true;
+            };
+          };
+        });
   in {
-    devShells = forEachSystem ({ pkgs }: let
+    devShells = forEachSystem ({pkgs}: let
       buildToolsVersion = "34.0.0";
       androidComposition = pkgs.androidenv.composeAndroidPackages {
         buildToolsVersions = [buildToolsVersion "28.0.3"];
@@ -27,19 +33,22 @@
     in {
       default = pkgs.mkShell {
         ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
-        buildInputs = with pkgs; [
-          zulu17
-          lcov
-        ] ++ (
-          if pkgs.stdenv.isDarwin
-          then [
-            cocoapods
+        buildInputs = with pkgs;
+          [
+            zulu17
+            lcov
           ]
-          else [
-            flutter
-            androidSdk
-          ]
-        );
+          ++ (
+            if pkgs.stdenv.isDarwin
+            then [
+              cocoapods
+            ]
+            else [
+              flutter
+              androidSdk
+              gst_all_1.gstreamer
+            ]
+          );
 
         shellHook =
           if !pkgs.stdenv.isDarwin
