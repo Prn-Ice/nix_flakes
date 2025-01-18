@@ -52,6 +52,22 @@
               gst_all_1.gst-plugins-bad
               gst_all_1.gst-plugins-ugly
               gst_all_1.gst-libav
+              pkg-config
+              glib
+              gtk3
+              xorg.libX11
+              xorg.libXcomposite
+              xorg.libXcursor
+              xorg.libXdamage
+              xorg.libXext
+              xorg.libXfixes
+              xorg.libXi
+              xorg.libXrandr
+              xorg.libXrender
+              xorg.libXtst
+              xorg.libxcb
+              libGL
+              libGLU
             ]
           );
 
