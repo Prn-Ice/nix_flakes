@@ -16,72 +16,47 @@
           pkgs = import nixpkgs {
             inherit system;
             config = {
-              # android_sdk.accept_license = true;
+              android_sdk.accept_license = true;
               allowUnfree = true;
             };
           };
         });
   in {
     devShells = forEachSystem ({pkgs}: let
-      # buildToolsVersion = "34.0.0";
-      # androidComposition = pkgs.androidenv.composeAndroidPackages {
-      #   buildToolsVersions = [buildToolsVersion "28.0.3"];
-      #   platformVersions = ["34" "33" "31" "28"];
-      #   abiVersions = ["armeabi-v7a" "arm64-v8a"];
-      #   includeEmulator = true;
-      # };
-      # androidSdk = androidComposition.androidsdk;
+      # Documentation: https://nixos.org/manual/nixpkgs/unstable/#android
+      buildToolsVersion = "34.0.0";
+      androidComposition = pkgs.androidenv.composeAndroidPackages {
+        buildToolsVersions = [buildToolsVersion "28.0.3"];
+        platformVersions = ["35" "34" "33" "31"];
+        # abiVersions = ["armeabi-v7a" "arm64-v8a"];
+        # systemImageTypes = ["default"];
+        # abiVersions = ["x86" "x86_64" "armeabi-v7a" "arm64-v8a"];
+        # includeSystemImages = true;
+        includeEmulator = true;
+        systemImageTypes = ["google_apis_playstore"];
+
+        # The `licenseAccepted = true;` seems to only work when androidenv.buildApp
+        # is used. Since Flutter doesn't use that it doesn't work.
+        # Therefore we can manually accept the different licenses here.
+        # Copied from: https://github.com/SharezoneApp/sharezone-app/blob/0bc1bfc2776305683e8d1c6e5f5d7c77dbef97ed/devenv.nix#L18
+        # Copied from: https://github.com/NixOS/nixpkgs/issues/267263#issuecomment-1833769682
+        extraLicenses = [
+          "android-googletv-license"
+          "android-sdk-arm-dbt-license"
+          "android-sdk-license"
+          "android-sdk-preview-license"
+          "google-gdk-license"
+          "intel-android-extra-license"
+          "intel-android-sysimage-license"
+          "mips-android-sysimage-license"
+        ];
+      };
+      androidSdk = androidComposition.androidsdk;
     in {
       default = pkgs.mkShell {
-        ANDROID_SDK_ROOT = "/home/prnice/Android/Sdk";
-        ANDROID_HOME = "/home/prnice/Android/Sdk";
-        # ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
+        ANDROID_SDK_ROOT = "${androidSdk}/libexec/android-sdk";
         # override the aapt2 that gradle uses with the nix-shipped version
-        # GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidSdk}/libexec/android-sdk/build-tools/${buildToolsVersion}/aapt2";
-
-        NIX_LD_LIBRARY_PATH = with pkgs;
-          "/home/prnice/Android/Sdk/emulator/lib64/:" +
-          "/home/prnice/Android/Sdk/emulator/lib64/qt/lib/:" +
-          lib.makeLibraryPath [
-            # For emulator
-            gperftools.out
-            libpulseaudio.out
-            xorg.libX11.out
-
-            # For qemu
-            nss
-            nspr
-            libpng
-            expat
-            libdrm
-            xorg.libxcb
-            libjpeg
-            fontconfig
-            freetype
-            xorg.libXi
-            xorg.libXext
-            xorg.libxkbfile
-            pcre2
-            libsndfile
-            xorg.libXau
-            xorg.libXdmcp
-            flac
-            libvorbis
-            libopus
-            libogg
-            mpg123
-            lame
-            libcap
-            libuuid
-            libbsd
-            xorg.libXcursor
-
-            # Others
-            stdenv.cc.cc.lib
-            zlib
-            libGL
-          ];
-        NIX_LD = pkgs.lib.fileContents "${pkgs.stdenv.cc}/nix-support/dynamic-linker";
+        GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${androidSdk}/libexec/android-sdk/build-tools/${buildToolsVersion}/aapt2";
 
         buildInputs = with pkgs;
           [
@@ -95,7 +70,7 @@
             ]
             else [
               flutter
-              # androidSdk
+              androidSdk
               ruby
               gst_all_1.gstreamer
               gst_all_1.gst-plugins-base
@@ -119,6 +94,7 @@
               xorg.libxcb
               libGL
               libGLU
+              vulkan-loader
             ]
           );
 
